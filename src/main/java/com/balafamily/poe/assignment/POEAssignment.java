@@ -32,7 +32,7 @@ public class POEAssignment {
             {
                 if (sUsername.contains("_"))//Checks if sUserName contains an underscore
                 {
-                    bUserValid = true;
+                    bUserValid = true;//Saves the 
                     System.out.println("Username succsessfully captured");
                 }
             }
@@ -92,6 +92,7 @@ public class POEAssignment {
         String sLoginUser; 
         String sLoginPass = "";
         
+        //Makes the user login to the system after they are done inputing
         System.out.println("Welcome user. Please re-enter your username again to ;ogin: ");
         sLoginUser = scnInput.next();
         if(sLoginUser == sUsername)
