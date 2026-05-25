@@ -9,119 +9,82 @@ package com.balafamily.poe.assignment;
  */
 public class LoginClass 
 {
-    private String Username;
-    private String Password;
+    private String username;
+    private String password;
     private boolean isLoginSuccessful;
-    
-    public boolean checkUsername(String sName)       
+
+    // USERNAME VALIDATION
+    public boolean checkUsername(String sName)
     {
-        boolean bValid = false;
-        if (sName.length() <= 5)
-            {
-                if (sName.contains("_"))
-                {
-                    bValid = true;
-                }
-            }
-        else
-        {
-            bValid = false;
-        }
-        return bValid;
+        return sName.contains("_")
+                && sName.length() <= 5;
     }
-    
+
+    // PASSWORD VALIDATION
     public boolean checkPasswordComplexity(String sPass)
     {
-        boolean bPassValid = false;
-        
-        boolean bPassCap = sPass.matches(".*[A-Z].*");              // Checks password if it contain's capital letters
-        int iPassLength = sPass.length();                           // Checks password's length
-        boolean bPassSpec = sPass.matches(".*[^a-zA-Z0-9].*");      // Checks password for special values
-        boolean bPassNum = sPass.matches(".*\\d.*");             // Checks password for numbers
-            
-        if (iPassLength >= 8)
-        {
-            if (bPassCap == true)
-            {
-                if (bPassSpec == true)
-                {
-                    if (bPassNum == true)
-                    {
-                        bPassValid = true; 
-                            System.out.println("Login password is valid");
-                    }
-                 }
-                }
-            }
-            else  
-            {
-              bPassValid = false;
-            }
-        return bPassValid;
+        boolean hasCapital =
+                sPass.matches(".*[A-Z].*");
+
+        boolean hasNumber =
+                sPass.matches(".*\\d.*");
+
+        boolean hasSpecial =
+                sPass.matches(".*[^a-zA-Z0-9].*");
+
+        return sPass.length() >= 8
+                && hasCapital
+                && hasNumber
+                && hasSpecial;
     }
-    
+
+    // PHONE NUMBER VALIDATION
     public boolean checkCellPhoneNumber(String sPhone)
-    {   
-        boolean bPhoneValid;
+    {
         String regex = "\\+\\d{1,3}\\d{10}";
 
-        if (sPhone.matches(regex)) 
-        {
-            bPhoneValid = true;        
-        } 
-        else 
-        {                                                            
-            bPhoneValid = false;             
-        } 
-        return bPhoneValid;
+        return sPhone.matches(regex);
     }
-    
+
+    // REGISTER USER
     public String registerUser(String sName, String sPass)
     {
-        boolean isValid;
-        
-        isValid = checkUsername(sName);
-        if (!isValid)
-            return "The username is no correctly formatted";
-        
-        isValid = checkPasswordComplexity(sPass);
-        if (!isValid)
-            return "The password does not meet the complexity standard";
-        
-        Username = sName;
-        Password = sPass;
-        
-        return "The user has been registered";
+        if (!checkUsername(sName))
+        {
+            return "Username incorrectly formatted.";
+        }
+
+        if (!checkPasswordComplexity(sPass))
+        {
+            return "Password incorrectly formatted.";
+        }
+
+        username = sName;
+        password = sPass;
+
+        return "User registered successfully.";
     }
-    
+
+    // LOGIN USER
     public boolean loginUser(String sName, String sPass)
     {
-        if ((Username.equals(sName)) && (Password.equals(sPass)))
+        isLoginSuccessful =
+                username.equals(sName)
+                && password.equals(sPass);
+
+        return isLoginSuccessful;
+    }
+
+    // RETURN LOGIN STATUS
+    public String returnLoginStatus()
+    {
+        if (isLoginSuccessful)
         {
-            isLoginSuccessful = true;
-            return true;
+            return "Login successful.";
         }
         else
         {
-            isLoginSuccessful = false;
-            return false;
+            return "Login failed.";
         }
-    }
-    
-    public String returnLoginStatus()
-    {
-        String sLogin;
-        if (isLoginSuccessful)
-        {
-             sLogin = "Login was successful";
-             System.out.print(sLogin);
-        }
-        else 
-        {
-            sLogin  = "Failed to login";
-            System.out.print(sLogin);
-        }
-        
-        return sLogin;
     }
 }

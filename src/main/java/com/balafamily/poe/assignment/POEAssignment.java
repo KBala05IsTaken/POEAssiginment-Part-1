@@ -13,99 +13,199 @@ public class POEAssignment {
 
     public static void main(String[] args) 
     {
+        Scanner input = new Scanner(System.in);
+
         LoginClass objLogin = new LoginClass();
-        Scanner scnInput = new Scanner(System.in);
-        String sPassword = "", sUsername = "";
-        
-        
-        boolean bPasswordValid = false;
-        boolean bUserValid = false; 
-        
-        //Check if the username has the proper inputs
-        while (bUserValid == false)
-        {
-            System.out.println("Welcome user. Please enter your username: ");
-            sUsername = scnInput.next();
-            int iUserLength = sUsername.length();
-            
-            if (iUserLength <= 5)//Checks the length of iUserLength
-            {
-                if (sUsername.contains("_"))//Checks if sUserName contains an underscore
-                {
-                    bUserValid = true;//Saves the 
-                    System.out.println("Username succsessfully captured");
-                }
-            }
-            else //Will loop through this part if the bUserValid boolean remains false
-            {
-                System.out.println("Username is not correctly formatted; please ensure that your username"
-                        + " contains an underscore and is no more than five characters in length");
-            }
-        }
-     //Checks if the password is valid   
-     while (bPasswordValid == false) 
-        {
-            System.out.println("Next, Please enter your password: ");
-            sPassword = scnInput.next();
-            boolean bPassCap = sPassword.matches(".*[A-Z].*");              // Checks password if it contain's capital letters
-            int iPassLength = sPassword.length();                           // Checks password's length
-            boolean bPassSpec = sPassword.matches(".*[^a-zA-Z0-9].*");      // Checks password for special values
-            boolean bPassNum = sPassword.matches(".*\\d.*");             // Checks password for numbers
-            
-            if (iPassLength >= 8)
-            {
-                if (bPassCap == true)
-                {
-                    if (bPassSpec == true)
-                    {
-                        if (bPassNum == true)                        {
 
-                            bPasswordValid = true; 
-                            System.out.println("Password successFully captured");
+        // =========================
+        // REGISTRATION
+        // =========================
+
+        String username;
+        String password;
+        String phoneNumber;
+
+        // USERNAME
+        do
+        {
+            System.out.println("""
+                    Create Username
+                    Must contain '_' and be no more than 5 characters.
+                    """);
+
+            username = input.nextLine();
+
+            if (!objLogin.checkUsername(username))
+            {
+                System.out.println("Username incorrectly formatted.");
+            }
+
+        } while (!objLogin.checkUsername(username));
+
+        System.out.println("Username successfully captured.");
+
+        // PASSWORD
+        do
+        {
+            System.out.println("""
+                    Create Password
+                    Must contain:
+                    - 8 characters
+                    - Capital letter
+                    - Number
+                    - Special character
+                    """);
+
+            password = input.nextLine();
+
+            if (!objLogin.checkPasswordComplexity(password))
+            {
+                System.out.println("Password incorrectly formatted.");
+            }
+
+        } while (!objLogin.checkPasswordComplexity(password));
+
+        System.out.println("Password successfully captured.");
+
+        // PHONE NUMBER
+        do
+        {
+            System.out.println("Enter phone number");
+            System.out.println("Example: +27831234567");
+
+            phoneNumber = input.nextLine();
+
+            if (!objLogin.checkCellPhoneNumber(phoneNumber))
+            {
+                System.out.println("Cell phone number incorrectly formatted.");
+            }
+
+        } while (!objLogin.checkCellPhoneNumber(phoneNumber));
+
+        System.out.println("Phone number successfully added.");
+
+        // REGISTER USER
+        System.out.println(
+                objLogin.registerUser(username, password));
+
+        // =========================
+        // LOGIN
+        // =========================
+
+        System.out.println("Enter username:");
+        String loginUser = input.nextLine();
+
+        System.out.println("Enter password:");
+        String loginPass = input.nextLine();
+
+        boolean isLoggedIn =
+                objLogin.loginUser(loginUser, loginPass);
+
+        System.out.println(
+                objLogin.returnLoginStatus());
+
+        // =========================
+        // QUICKCHAT SYSTEM
+        // =========================
+
+        if (isLoggedIn)
+        {
+            System.out.println("Welcome to QuickChat.");
+
+            System.out.println(
+                    "How many messages would you like to send?");
+
+            int maxMessages =
+                    Integer.parseInt(input.nextLine());
+
+            int sentMessages = 0;
+
+            int option;
+
+            do
+            {
+                System.out.println("""
+                        
+                        QUICKCHAT MENU
+                        
+                        1) Send Messages
+                        2) Show recently sent messages
+                        3) Quit
+                        """);
+
+                option =
+                        Integer.parseInt(input.nextLine());
+
+                switch (option)
+                {
+                    case 1:
+
+                        if (sentMessages < maxMessages)
+                        {
+                            System.out.println(
+                                    "Enter recipient number:");
+
+                            String recipient =
+                                    input.nextLine();
+
+                            System.out.println(
+                                    "Enter your message:");
+
+                            String messageText =
+                                    input.nextLine();
+
+                            Message objMessage =
+                                    new Message(
+                                            sentMessages + 1,
+                                            recipient,
+                                            messageText);
+
+                            String result =
+                                    objMessage.sentMessage();
+
+                            System.out.println(result);
+
+                            // Only count valid messages
+                            if (result.equals("Message successfully sent"))
+                            {
+                                sentMessages++;
+
+                                System.out.println(
+                                        objMessage.printMessage());
+                            }
                         }
-                    }
+                        else
+                        {
+                            System.out.println(
+                                    "You have reached your message limit.");
+                        }
+
+                        break;
+
+                    case 2:
+
+                        System.out.println("Coming Soon.");
+
+                        break;
+
+                    case 3:
+
+                        System.out.println("""
+            
+                        Application Closed.
+                        Total messages sent: """
+                        + Message.returnTotalMessages());
+
+                        break;
+
+                    default:
+
+                        System.out.println("Invalid menu option.");
                 }
-            }
-            else if (bPasswordValid == false)
-            {
-              System.out.println("Password is not correctly formatted;"
-                      + " please insure that the password contains at least "
-                      + "eight characters, a capital letter, a special character and numbers"); 
-            } 
-        }
-         //Checks if the phone number is valid
-         System.out.println("Type in your country code which is then followed by your phone number");
-         String sPhoneNumber = scnInput.next();
 
-        // Regex: starts with +, followed by 1–3 digits (country code), then 10 digits (phone number)
-        String regex = "\\+\\d{1,3}\\d{10}";
-
-        if (sPhoneNumber.matches(regex)) 
-        {
-            System.out.println("Valid international phone number.");        
-        } 
-        else 
-        {                                                           
-            System.out.println("Invalid phone number format.");            
-        }   
-        
-        String sLoginUser; 
-        String sLoginPass = "";
-        
-        //Makes the user login to the system after they are done inputing
-        System.out.println("Welcome user. Please re-enter your username again to ;ogin: ");
-        sLoginUser = scnInput.next();
-        if(sLoginUser == sUsername)
-        {
-            System.out.println("Welcome user. Please enter your username: ");
-            sLoginPass = scnInput.next();
+            } while (option != 3);
         }
-        
-        objLogin.checkUsername(sUsername);
-        objLogin.checkPasswordComplexity(sPassword);
-        objLogin.checkCellPhoneNumber(sPhoneNumber);
-        objLogin.registerUser(sUsername, sPassword);
-        objLogin.loginUser(sLoginUser, sLoginPass);
-        objLogin.returnLoginStatus();
+
+        input.close();
     }
 }
