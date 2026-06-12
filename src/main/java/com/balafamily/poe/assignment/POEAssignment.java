@@ -130,7 +130,8 @@ public class POEAssignment {
                         
                         1) Send Messages
                         2) Show recently sent messages
-                        3) Quit
+                        3) Stored Messages
+                        4) Quit
                         """);
 
                 option =
@@ -187,8 +188,81 @@ public class POEAssignment {
                         System.out.println("Coming Soon.");
 
                         break;
-
+                        
                     case 3:
+
+                    int storedOption;
+
+                    do
+                    {
+                        System.out.println("""
+
+                                STORED MESSAGE MENU
+
+                                1) Display sender and recipient
+                                2) Display longest message
+                                3) Search by Message ID
+                                4) Search by Recipient
+                                5) Delete by Message Hash
+                                6) Display Full Report
+                                0) Back
+                                """);
+
+                        storedOption =
+                                Integer.parseInt(
+                                        input.nextLine());
+
+                        switch(storedOption)
+                        {
+                            case 1:
+                                Message.displaySendersRecipients();
+                                break;
+
+                            case 2:
+                                Message.displayLongestMessage();
+                                break;
+
+                            case 3:
+                                System.out.println(
+                                        "Enter Message ID:");
+
+                                String id =
+                                        input.nextLine();
+
+                                Message.searchByMessageID(id);
+                                break;
+
+                            case 4:
+                                System.out.println(
+                                        "Enter recipient:");
+
+                                String recipient =
+                                        input.nextLine();
+
+                                Message.searchByRecipient(
+                                        recipient);
+                                break;
+
+                            case 5:
+                                System.out.println(
+                                        "Enter message hash:");
+
+                                String hash =
+                                        input.nextLine();
+
+                                Message.deleteByHash(hash);
+                                break;
+
+                            case 6:
+                                Message.displayReport();
+                                break;
+                        }
+
+                    } while(storedOption != 0);
+
+                    break;
+
+                    case 4:
 
                         System.out.println("""
             
